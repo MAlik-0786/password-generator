@@ -1,0 +1,93 @@
+<html>
+<head>
+    <title>Password Generator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+    <div class="container mx-auto p-4">
+        <div class="max-w-md mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
+            <div class="p-4 bg-blue-500 text-white text-center">
+                <h3 class="text-xl font-bold">Password Generator</h3>
+            </div>
+            <div class="p-4">
+                <form id="passwordForm">
+                    <div class="mb-4">
+                        <label for="length" class="block text-gray-700">Password Length</label>
+                        <input type="number" id="length" class="w-full mt-2 p-2 border rounded" min="4" max="32" value="12">
+                    </div>
+                    <div class="mb-4">
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" id="includeUppercase" class="form-checkbox" checked>
+                            <span class="ml-2 text-gray-700">Include Uppercase Letters</span>
+                        </label>
+                    </div>
+                    <div class="mb-4">
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" id="includeNumbers" class="form-checkbox" checked>
+                            <span class="ml-2 text-gray-700">Include Numbers</span>
+                        </label>
+                    </div>
+                    <div class="mb-4">
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" id="includeSymbols" class="form-checkbox" checked>
+                            <span class="ml-2 text-gray-700">Include Symbols</span>
+                        </label>
+                    </div>
+                    <button type="button" class="w-full bg-blue-500 text-white py-2 rounded" onclick="generatePassword()">Generate Password</button>
+                </form>
+                <div class="mt-4 text-center">
+                    <p class="password-display text-lg font-bold" id="passwordDisplay">Your password will appear here</p>
+                    <p class="password-display text-green-500" id="passwordCopied"></p>
+                    <button class="mt-2 bg-gray-500 text-white py-2 px-4 rounded" onclick="copyPassword()">Copy Password</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function generatePassword() {
+            const length = document.getElementById('length').value;
+            const includeUppercase = document.getElementById('includeUppercase').checked;
+            const includeNumbers = document.getElementById('includeNumbers').checked;
+            const includeSymbols = document.getElementById('includeSymbols').checked;
+
+            const lowercase = 'abcdefghijklmnopqrstuvwxyz';
+            const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const numbers = '0123456789';
+            const symbols = '!@#$%^&*()_+~`|}{[]:;?><,./-=';
+            
+            let characters = lowercase;
+            if (includeUppercase) characters += uppercase;
+            if (includeNumbers) characters += numbers;
+            if (includeSymbols) characters += symbols;
+
+            let password = '';
+            for (let i = 0; i < length; i++) {
+                const randomIndex = Math.floor(Math.random() * characters.length);
+                password += characters[randomIndex];
+            }
+
+            document.getElementById('passwordDisplay').textContent = password;
+        }
+
+        function copyPassword() {
+            const passwordDisplay = document.getElementById('passwordDisplay');
+            const textarea = document.createElement('textarea');
+            textarea.value = passwordDisplay.textContent;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            document.getElementById('passwordCopied').textContent = 'Password copied!';
+        }
+    </script>
+</body>
+</html>
